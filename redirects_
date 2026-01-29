@@ -1,0 +1,2 @@
+# Ensure any client route under /baseviewer/ returns the SPA index
+/baseviewer/*  /baseviewer/index.html  200
