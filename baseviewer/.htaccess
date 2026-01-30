@@ -1,0 +1,11 @@
+# Ensure client-side routes under /baseviewer/ return the SPA index
+RewriteEngine On
+RewriteBase /baseviewer/
+
+# Serve existing files/directories normally
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Otherwise serve index.html (SPA fallback)
+RewriteRule ^ index.html [L]
