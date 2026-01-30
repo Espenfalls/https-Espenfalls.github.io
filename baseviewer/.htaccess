@@ -2,6 +2,10 @@
 RewriteEngine On
 RewriteBase /baseviewer/
 
+# Do NOT rewrite requests for the assets folder (serve static files directly)
+# With RewriteBase set, match against the local path under /baseviewer/
+RewriteRule ^assets/ - [L]
+
 # Serve existing files/directories normally
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
