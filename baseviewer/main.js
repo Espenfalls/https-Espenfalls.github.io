@@ -1,5 +1,5 @@
 // main.js
-// DOMContentLoaded-wrapped main script — small-card rendering simplified (no trait lists).
+// Cleaned-up main script with server-provided background support.
 // Replace your current baseviewer/main.js with this file and hard-refresh the page.
 
 import { schema, createParentFromPhenotype, createRandomParent, genotypeToPhenotype } from "./genotype.js";
@@ -45,6 +45,16 @@ document.addEventListener("DOMContentLoaded", () => {
   let parentA = null;
   let parentB = null;
 
+  // Background URL comes from backend injection: window.BV_CONFIG = { background: "/path/to/bg.png" };
+  // If backend does not inject, leave blank (no background).
+  let currentBgUrl = (window.BV_CONFIG && typeof window.BV_CONFIG.background === "string") ? window.BV_CONFIG.background : "";
+
+  // Public helper so backend/admin scripts can change background after load:
+  window.setBVBackground = function (url) {
+    currentBgUrl = url || "";
+    updateAllBackgrounds();
+  };
+
   // ----- helpers -----
   function makeTraitSelectors(container, side) {
     container.innerHTML = "";
@@ -88,6 +98,23 @@ document.addEventListener("DOMContentLoaded", () => {
     })));
   }
 
+  // ----- Background helpers -----
+  function applyBackgroundToAvatarContainer(el) {
+    if (!el) return;
+    if (currentBgUrl) {
+      el.style.backgroundImage = `url("${currentBgUrl}")`;
+      el.style.backgroundSize = "cover";
+      el.style.backgroundPosition = "center";
+      el.style.backgroundRepeat = "no-repeat";
+    } else {
+      el.style.backgroundImage = "";
+    }
+  }
+
+  function updateAllBackgrounds() {
+    document.querySelectorAll('.avatar, .avatar-large').forEach(el => applyBackgroundToAvatarContainer(el));
+  }
+
   // ----- Rendering using stacked <img> layers -----
   // Small containers (parent cards / offspring wrappers) render only the avatar images (no trait list/title).
   function renderCreatureAsLayers(creature, containerEl) {
@@ -99,6 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
       containerEl.innerHTML = "";
       containerEl.setAttribute("role", "img");
       containerEl.setAttribute("aria-label", `Preview: generation ${creature.generation}`);
+      applyBackgroundToAvatarContainer(containerEl);
       for (const locus of layerOrder) {
         const value = phenotype[locus];
         const fname = assetMap[locus] && assetMap[locus][value];
@@ -114,6 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const avatar = document.createElement("div");
       avatar.className = "avatar";
       avatar.style.margin = "0 auto"; // center inside the wrapper
+      applyBackgroundToAvatarContainer(avatar);
 
       for (const locus of layerOrder) {
         const value = phenotype[locus];
@@ -153,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!anyAsset) {
       // fallback avatar only
       renderAvatarFallback(containerEl);
+      applyBackgroundToAvatarContainer(containerEl.querySelector('.avatar'));
       return;
     }
     await preloadAssetsForPhenotype(phenotype).catch(()=>{});
@@ -250,6 +280,9 @@ document.addEventListener("DOMContentLoaded", () => {
       tryRenderCreature(parentB, parentB_card).catch(()=>{})
     ]);
     if (mainCanvas) tryRenderCreature(parentA, mainCanvas);
+
+    // Apply any background provided by server (window.BV_CONFIG.background)
+    updateAllBackgrounds();
     updateBreedButtonState();
   })();
 });
