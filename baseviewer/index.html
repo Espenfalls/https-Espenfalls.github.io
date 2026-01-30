@@ -30,6 +30,7 @@
       height: 240px;
       display: inline-block;
       background: transparent;
+      margin-bottom: 10px;
     }
     .avatar img.layer {
       position: absolute;
@@ -42,6 +43,19 @@
       user-select: none;
     }
 
+    /* Centered breed controls */
+    .breed-center {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+      margin-bottom: 6px;
+    }
+    .breed-center .count-wrap { width: 140px; }
+    .breed-center .btn-wrap { width: 140px; }
+
     /* Card inner layout */
     .card .title { font-weight:600; margin-bottom:6px; }
     .card .traits-list { font-size:13px; color:#333; line-height:1.3; }
@@ -53,32 +67,39 @@
   <div class="container">
     <div class="panel" id="parentA-panel">
       <h3>Parent A</h3>
+
+      <!-- avatar above the trait selectors -->
+      <div id="parentA-card" style="margin-bottom:10px"></div>
+
       <div class="traits" id="parentA-traits" aria-hidden="false"></div>
       <div class="controls">
         <button id="createA" class="primary">Create Parent A</button>
         <button id="randomA" class="secondary" type="button">Random</button>
       </div>
-      <div id="parentA-card" style="margin-top:12px"></div>
     </div>
 
     <div class="panel" id="parentB-panel">
       <h3>Parent B</h3>
+
+      <!-- avatar above the trait selectors -->
+      <div id="parentB-card" style="margin-bottom:10px"></div>
+
       <div class="traits" id="parentB-traits" aria-hidden="false"></div>
       <div class="controls">
         <button id="createB" class="primary">Create Parent B</button>
         <button id="randomB" class="secondary" type="button">Random</button>
       </div>
-      <div id="parentB-card" style="margin-top:12px"></div>
     </div>
+  </div>
 
-    <div class="panel" id="breed-panel" style="width:220px">
-      <h3>Breed</h3>
-      <label class="small">Number of offspring</label>
+  <!-- Centered breed controls placed below the genetic dropdowns -->
+  <div class="breed-center" role="region" aria-label="Breed controls">
+    <div class="count-wrap">
+      <label class="small" for="offspringCount" style="margin-bottom:6px; display:block; text-align:center;">Number of offspring</label>
       <input id="offspringCount" type="number" min="1" value="3" />
-      <div style="margin-top:8px" class="controls">
-        <button id="breedBtn" class="primary" disabled>Breed</button>
-      </div>
-      <div style="margin-top:8px" class="muted small">Create both parents to enable breeding.</div>
+    </div>
+    <div class="btn-wrap" style="display:flex; align-items:center; justify-content:center;">
+      <button id="breedBtn" class="primary" disabled style="width:100%;">Breed</button>
     </div>
   </div>
 
