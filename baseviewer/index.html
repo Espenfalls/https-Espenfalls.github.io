@@ -5,26 +5,59 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <!-- Make asset loading and client-side routes resolve from /baseviewer/ -->
   <base href="/baseviewer/">
-  <title>Velvedeer — Base Viewer (Demo)</title>
+  <title>Velvedeer — Breeding</title>
   <style>
     body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; padding: 1rem; }
-    #grid { display:flex; gap:1rem; flex-wrap:wrap; }
-    .card { border:1px solid #ddd; padding:0.5rem; width:140px; text-align:center; }
-    button{ margin-top:0.5rem; }
+    .container { display:flex; gap:1rem; align-items:flex-start; }
+    .panel { border:1px solid #ddd; padding:1rem; width:280px; border-radius:6px; background:#fff; }
+    .panel h3 { margin-top:0; }
+    .traits { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px; }
+    .controls { margin-top:8px; display:flex; gap:8px; align-items:center; }
+    #offspring { margin-top:1rem; display:flex; gap:8px; flex-wrap:wrap; }
+    .card { border:1px solid #ddd; padding:0.5rem; width:140px; text-align:center; border-radius:6px; background:#fafafa; }
+    .small { font-size:12px; color:#444; }
+    label { display:block; font-size:12px; color:#333; margin-bottom:4px; }
+    select, input[type="number"], button { width:100%; padding:6px; border-radius:4px; border:1px solid #ccc; }
+    button.primary { background:#2563eb; color:white; border:none; cursor:pointer; }
+    .muted { color:#666; font-size:12px; }
   </style>
 </head>
 <body>
-  <h1>Velvedeer — Breeding demo</h1>
-  <p>Pick two parents and click "Breed". Offspring appears below.</p>
+  <h1>Velvedeer — Breeding configurator</h1>
 
-  <div id="grid"></div>
+  <div class="container">
+    <div class="panel" id="parentA-panel">
+      <h3>Parent A</h3>
+      <div class="traits" id="parentA-traits"></div>
+      <div class="controls">
+        <button id="createA" class="primary">Create Parent A</button>
+        <button id="randomA">Random</button>
+      </div>
+      <div id="parentA-card" style="margin-top:8px"></div>
+    </div>
 
-  <div style="margin-top:1rem">
-    <button id="spawn">Spawn 6 random</button>
-    <button id="breedBtn" disabled>Breed Selected</button>
+    <div class="panel" id="parentB-panel">
+      <h3>Parent B</h3>
+      <div class="traits" id="parentB-traits"></div>
+      <div class="controls">
+        <button id="createB" class="primary">Create Parent B</button>
+        <button id="randomB">Random</button>
+      </div>
+      <div id="parentB-card" style="margin-top:8px"></div>
+    </div>
+
+    <div class="panel" id="breed-panel" style="width:200px">
+      <h3>Breed</h3>
+      <label class="small">Number of offspring</label>
+      <input id="offspringCount" type="number" min="1" value="3" />
+      <div style="margin-top:8px" class="controls">
+        <button id="breedBtn" class="primary" disabled>Breed</button>
+      </div>
+      <div style="margin-top:8px" class="muted small">Select traits above and create both parents first.</div>
+    </div>
   </div>
 
-  <h2>Offspring</h2>
+  <h2 style="margin-top:1rem">Offspring</h2>
   <div id="offspring"></div>
 
   <script type="module" src="./main.js"></script>
