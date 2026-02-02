@@ -123,15 +123,6 @@
       .avatar { width: min(75vw, 240px); height: min(75vw, 240px); }
     }
   </style>
-
-  <!--
-    Backend integration note:
-    The backend should inject the background URL when serving the page if you want a backdrop for avatars.
-    Example server-side injection (must be placed BEFORE the main.js import below):
-      <script>window.BV_CONFIG = { background: "/baseviewer/assets/backgrounds/bg1.png" };</script>
-
-    Alternatively you can call window.setBVBackground(url) later (after main.js loads) to change it dynamically.
-  -->
 </head>
 <body>
   <h1>Velvedeer — Breeding configurator</h1>
@@ -187,6 +178,15 @@
     <div id="offspring"></div>
   </div>
 
-  <script type="module" src="./main.js"></script>
+  <!-- Permanent BV_CONFIG: placed BEFORE main.js -->
+  <script>
+    // Ensure this object is set before main.js runs
+    window.BV_CONFIG = {
+      background: "/baseviewer/assets/backgrounds/moonlight.png"
+    };
+  </script>
+
+  <!-- Add a cache-bust while testing to force browsers to fetch a fresh main.js -->
+  <script type="module" src="./main.js?v=2"></script>
 </body>
 </html>
